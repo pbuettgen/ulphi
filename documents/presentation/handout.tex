@@ -1,0 +1,42 @@
+%%% -*- mode: LaTeX -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% ulphi.en.tex is part of ulphi, a CAE tool and library for computing
+% electromagnetic fields.
+%
+% All rights reserved.
+%
+% This program is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\NeedsTeXFormat{LaTeX2e}
+\documentclass[handout]{beamer}
+
+%\usepackage[utf8]{inputenx}
+\usepackage[ngerman,main=english]{babel}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{fixmath,esint}
+\usepackage[squaren]{SIunits}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\usepackage{pgfpages}
+\pgfpagesuselayout{16 on 1}[a4paper,landscape,border shrink=1mm]
+
+\input{../include/preamble-common.tex}
+
+\newcommand*{\Um}{\ensuremath{U_{\text{m}}}}
+
+\mode<handout>{\setbeamercolor{background canvas}{bg=black!5}}
+
+%\includeonly{frame01,frame03,frame05,frame06,frame09,frame10,frame12,frame13}
+
+\input{frames.tex}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: nil
+%%% ispell-local-dictionary: "en_US"
+%%% End: 

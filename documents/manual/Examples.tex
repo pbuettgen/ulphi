@@ -1,0 +1,265 @@
+% -*- coding: utf-8 -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% This file is part of ulphi, a CAE tool and library for
+% computing electromagnetic fields.
+%
+% Permission is granted to copy, distribute and/or modify this
+% document under the terms of the \gls{gnu} Free Documentation
+% License, Version 1.3 or any later version published by the Free
+% Software Foundation; with no Invariant Sections, no Front-Cover
+% Texts, and no Back-Cover Texts.  A copy of the license is included
+% in the section entitled GNU Free Documentation License.
+%
+% This manual is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\chapter{Examples}
+\label{cha:examples}
+
+\section{Coaxial Line}
+\label{sec:coaxial-line}
+
+The geometry for this example is shown in figure~\ref{fig:coaxial-line}.
+It is a good example for validating the library because an analytical
+solution is known.  \par The inner conductor carries the current~$I$
+and the outer conductor carries the current~$-I$ -- both homogeneously
+distributed over the conductor's surface.  The current density in the
+outer conducter is
+\begin{gather}
+  J_3=-J_1\cdot\frac{r_1^2}{r_3^2-r_2^2}\text{~.}
+\end{gather}
+Using equation~\eqref{eq:3} the magnetic field intensity computes to
+\begin{gather}
+  H(r)= \frac{J_1}{2}
+  \begin{cases}
+    r & r \le r_1\text{~,} \\
+    \frac{r_1^2}{r} & r_1 < r \le r_2\text{~,} \\
+    \frac{r_1^2}{r}\cdot\left(1-\frac{r^2-r_2^2}{r_3^2-r_2^2}\right)
+    & r_2 < r \le r_3\text{~.}
+  \end{cases}
+\end{gather}
+From \eqref{eq:4} the magnetic vector potential is found to be
+\begin{multline}
+\label{eq:12}
+  A(0)-A(r) = \frac{\mu_0J_1}{2} \\ \cdot
+  \begin{cases}
+    r^2/2 & r \le r_1\text{~,} \\
+    r_1^2\left(\frac{1}{2}+\ln\frac{r}{r_1}\right)
+    & r_1 < r \le r_2\text{~,} \\
+    r_1^2\left(\frac{1}{2}+\ln\frac{r_2}{r_1}
+      +(1+\frac{r_2^2}{r_3^2-r_2^2})\ln\frac{r}{r_2}
+      +\frac{r^2-r_2^2}{2(r_3^2-r_2^2)}\right)
+    & r_2 < r \le r_3\text{~.} \\
+  \end{cases}
+\end{multline}
+Both solutions -- the numerical and \eqref{eq:12} -- are compared in
+figure~\ref{fig:VectPotentialCoaxialLine} and agree very well.
+\begin{figure}
+  \begin{maxipage}
+    \hfil
+    \subfloat[Geometry]{
+      \input{../images/Coaxial-Line.pdf_tex}
+      \label{fig:coaxial-line}
+    } \hfil
+    \subfloat[Result]{
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=.6\linewidth,
+          height=.3708203932499369\linewidth,
+          xlabel=${r}/{\milli\metre}\quad\longrightarrow$,
+          ylabel=$A\cdot\frac{\metre}{\micro\weber}\quad\longrightarrow$,
+          grid=major,
+          grid style={line width=.18mm},
+          tick style={line width=.35mm},
+          legend style={at={(0.95,0.95)},anchor=north east},
+          line width=.35mm]
+          \addplot[mark=diamond,only marks]
+          table[x=x, y=NumA] {../datasets/coaxial_line.csv};
+          \addplot[smooth,mark=none,line width=.7mm,style=dotted]
+          table[x=x, y=SymA] {../datasets/coaxial_line.csv};
+          \legend{numerical, analytical}
+        \end{axis}
+      \end{tikzpicture}
+      \label{fig:VectPotentialCoaxialLine}
+    }
+    \caption{Coaxial line}
+  \end{maxipage}
+\end{figure}
+
+\section{Simple iron core}
+\label{sec:simple-iron-core}
+
+In this example the coil is fed by a direct current.  After the
+computation is done, the result is checked against the result gained
+by the average-iron-path-method.  Also the field line plot
+(figure~\ref{fig:SimpleIronCoreFieldLines}) looks reasonable.
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      title={$A\cdot\frac{\metre}{\milli\weber}$},
+      width=.95\linewidth,
+      axis equal={true},
+      xmin={0},
+      xmax=50,
+      ymin=-5,
+      ymax=60,
+      % xtick={-10,0,...,60},
+      % ytick={-10,0,...,60},
+      xlabel=$x/{\milli\metre}\quad\longrightarrow$,
+      ylabel=$y/{\milli\metre}\quad\longrightarrow$,
+      grid=major,
+      grid style={line width=.18mm},
+      tick style={line width=.35mm},
+      line width=.35mm]
+      %% iron core shape
+      \addplot[gray,fill=gray!20,opacity=.33,line width=.7mm] 
+      coordinates {
+        (15,0) (40,0) (40,54) (0, 54) (0, 29) (15,29)} -- cycle;
+      %% coils
+      \addplot[copper,fill=copper,opacity=.33,line width=.7mm]
+      coordinates {(5,0) (10,0) (10,24) (5,24)} -- cycle;
+      \addplot[copper,fill=copper,opacity=.33,line width=.7mm]
+      coordinates { (45,0) (50,0) (50,24) (45,24)} -- cycle;
+      \addplot[contour gnuplot, line width=.7mm]
+      table[x=x, y=y, z=potential] {../datasets/simple_iron_core.csv};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Field lines inside the simple iron core}
+  \label{fig:SimpleIronCoreFieldLines}
+\end{figure}
+
+
+\section{E-I-Transformer core}
+\label{sec:inductor}
+
+The device and the model setup for this example are shown in
+figure~\ref{fig:ei-transformer-device} and
+\ref{fig:ei-transformer-model}.
+\begin{figure}
+  \begin{maxipage}
+    \hfil
+    \subfloat[physical device]{
+      \input{../images/Mantel-Transformator.pdf_tex}
+      \label{fig:ei-transformer-device}
+    } \hfil
+    \subfloat[Model]{
+      \input{../images/Mantel-Transformator-Modell.pdf_tex}
+      \label{fig:ei-transformer-model}
+    } \hfil
+    \\[\bigskipamount]
+    \hfil
+    \subfloat[average core flux density]{
+      \begin{tikzpicture}
+        \begin{axis}[ width=.45\linewidth,
+          height=.2781152949374527\linewidth,
+          xlabel=$t/{\milli\second}\quad\longrightarrow$,
+          ylabel=$B/{\tesla}\quad\longrightarrow$, grid=major, grid
+          style={line width=.18mm}, tick style={line width=.35mm},
+          legend style={at={(0.95,0.95)},anchor=north east}, line
+          width=.35mm]
+          \addplot[line width=.7mm] table[x=t,
+          y=y1]{../datasets/E_I_transformer_core_time.csv}; 
+          \addplot[smooth, line
+          width=.7mm, style=dashed] table[x=t,
+          y=y2]{../datasets/E_I_transformer_core_time.csv}; 
+          \legend{waveform, fundamental}
+        \end{axis}
+      \end{tikzpicture}
+      \label{fig:ei-transformer-result-time-domain}
+    } \hfil \subfloat[spectrum]{
+      \begin{tikzpicture}
+        \begin{axis}[ width=.45\linewidth,
+          height=.2781152949374527\linewidth, xlabel=harmonic
+          order$\quad\longrightarrow$,
+          ylabel=$B/{\tesla}\quad\longrightarrow$, grid=major, grid
+          style={line width=.18mm}, tick style={line width=.35mm},
+          line width=.35mm]
+          \addplot[ycomb, line width=.7mm]
+          table{../datasets/E_I_transformer_core_freq.csv};
+        \end{axis}
+      \end{tikzpicture}
+      \label{fig:ei-transformer-result-harmonics}
+    } \hfil
+    \caption{E-I-transformer core}
+    \label{fig:transformer}
+  \end{maxipage}
+\end{figure}
+In this example the coil is fed by an alternating current.  As the
+results show (figure~\ref{fig:ei-transformer-result-time-domain} and
+\ref{fig:ei-transformer-result-harmonics}) the device is already
+operated at the level of saturation.
+
+\section{Wound Iron Core}
+\label{sec:wound-iron-core}
+
+This is the example which motivated the development of this library.
+The iron core (figure~\ref{fig:wound-transformer-core}) has straight
+and rounded sections.  This can be modeled using the different types
+of grids.  \par In all examples before a current source
+was used.  This is very uncommon in practice: Usually you are using a
+voltage source.  Also you cannot specify a voltage source in ulphi,
+you can get the same effect by using a inhomogeneous
+\personname{Dirichlet} boundary condition to specify the total flux
+passing throw the iron core.  After solving the task the magnetic
+voltage is evaluated.
+\begin{figure}
+  \begin{maxipage}
+    \hfil
+    \subfloat[physical device]{
+      \input{../images/Wound-Transformer-Core.pdf_tex}
+    }
+    \hfil
+    \subfloat[model]{
+      \input{../images/Example-Model.pdf_tex}
+    }
+    \hfil
+    \\[\bigskipamount]
+    \hfil
+    \subfloat[magnetic voltage]{
+      \begin{tikzpicture}
+        \begin{axis}[ width=.45\linewidth,
+          height=.2781152949374527\linewidth,
+          xlabel=$t/{\milli\second}\quad\longrightarrow$,
+          ylabel=$\gls{Um}/{\kilo\ampere}\quad\longrightarrow$, grid=major, grid
+          style={line width=.18mm}, tick style={line width=.35mm},
+          legend style={at={(0.95,0.95)},anchor=north east}, line
+          width=.35mm]
+          \addplot[line width=.7mm] table[x=t,
+          y=y1]{../datasets/wound_iron_core_time.csv}; 
+          \addplot[smooth, line
+          width=.7mm, style=dashed] table[x=t,
+          y=y2]{../datasets/wound_iron_core_time.csv}; \legend{waveform,
+            fundamental}
+        \end{axis}
+      \end{tikzpicture}
+      \label{fig:ei-transformer-result-time-domain}
+    } \hfil \subfloat[spectrum]{
+      \begin{tikzpicture}
+        \begin{axis}[ width=.45\linewidth,
+          height=.2781152949374527\linewidth, xlabel=harmonic
+          order$\quad\longrightarrow$,
+          ylabel=$\gls{Um}/{\kilo\ampere}\quad\longrightarrow$, grid=major, grid
+          style={line width=.18mm}, tick style={line width=.35mm},
+          line width=.35mm]
+          \addplot[ycomb, line width=.7mm]
+          table{../datasets/wound_iron_core_freq.csv};
+        \end{axis}
+      \end{tikzpicture}
+      \label{fig:ei-transformer-result-harmonics}
+    } \hfil
+    \caption{Wound iron core}
+    \label{fig:wound-transformer-core}
+  \end{maxipage}
+\end{figure}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "manual"
+%%% ispell-local-dictionary: "en_US"
+%%% End: 

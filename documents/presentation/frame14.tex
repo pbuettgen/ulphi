@@ -1,0 +1,52 @@
+%%% -*- mode: LaTeX -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% ulphi.en.tex is part of ulphi, a CAE tool and library for computing
+% electromagnetic fields.
+%
+% All rights reserved.
+%
+% This program is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\begin{frame}{Wound iron core}{Result}
+  \raggedright
+  \begin{tikzpicture}
+    \begin{axis}[ width=.7119349550499537\textheight,
+      height=.44\textheight,
+      xlabel=$t/{\milli\second}\quad\longrightarrow$,
+      ylabel=$\Um/{\kilo\ampere}\quad\longrightarrow$, grid=major, grid
+      style={line width=.18mm}, tick style={line width=.35mm},
+      legend style={at={(0.95,0.95)},anchor=north east}, line
+      width=.35mm]
+      \addplot[line width=.7mm] table[x=t,
+      y=y1]{../datasets/wound_iron_core_time.csv}; 
+      \addplot[smooth, line
+      width=.7mm, style=dashed] table[x=t,
+      y=y2]{../datasets/wound_iron_core_time.csv}; \legend{waveform,
+        fundamental}
+    \end{axis}
+  \end{tikzpicture}
+  \vfill
+  \raggedleft
+  \begin{tikzpicture}
+    \begin{axis}[ width=.7119349550499537\textheight,
+      height=.44\textheight, xlabel=harmonic
+      order$\quad\longrightarrow$,
+      ylabel=$\Um/{\kilo\ampere}\quad\longrightarrow$, grid=major, grid
+      style={line width=.18mm}, tick style={line width=.35mm},
+      line width=.35mm]
+      \addplot[ycomb, line width=.7mm]
+      table{../datasets/wound_iron_core_freq.csv};
+    \end{axis}
+  \end{tikzpicture}
+\end{frame}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: nil
+%%% ispell-local-dictionary: "en_US"
+%%% End: 

@@ -1,0 +1,2 @@
+usr/include/*/*.hpp
+usr/lib/*-*-*/lib*.so

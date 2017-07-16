@@ -1,0 +1,34 @@
+%%% -*- mode: LaTeX -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% ulphi.en.tex is part of ulphi, a CAE tool and library for computing
+% electromagnetic fields.
+%
+% All rights reserved.
+%
+% This program is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\begin{frame}{Equations in Magnetostatics}
+  \begin{align*}
+    \label{eq:1}
+    \nabla\times\left(\nu\vect{B}\right) &= \vect{J} &\Leftrightarrow&&
+    \ointeg{l}{\nu\vect{B}}{\vect{l}}&= \Theta \\
+    %%
+    \nabla\times\vect{A} &= \vect{B} &\Leftrightarrow&&
+    \ointeg{l}{\vect{B}}{\vect{l}}&= \Phi
+  \end{align*}
+  \begin{itemize}
+  \item Two equations require two grids
+  \item Grids are made up of the integral's integration pathes
+  \end{itemize}
+\end{frame}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: nil
+%%% ispell-local-dictionary: "en_US"
+%%% End: 

@@ -1,0 +1,38 @@
+// -*- coding: utf-8 -*-
+/* 
+ * Copyright © 2012-2016 Philipp Büttgenbach
+ *
+ * This file is part of ulphi, a CAE tool and library for computing
+ * electromagnetic fields.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/* Dynamically link to the boost log library */
+#define BOOST_LOG_DYN_LINK
+
+/* Use pthread in gtest */
+#undef GTEST_HAS_PTHREAD
+
+#define HAVE_BOOST_LOG
+
+/* Whether operator[](graph_bundle_t) is available in a bidirectional CSR
+   Graph */
+#cmakedefine HAVE_CSR_BIDIR_GRAPH_PROPERTY_ACCESS
+
+/* Define if you have libloki */
+#define HAVE_LIBLOKI
+
+/* Name of package */
+#define PACKAGE "@PROJECT_NAME@"
+
+/* Define to the full name of this package. */
+#define PACKAGE_NAME "@PROJECT_NAME@"
+
+/* Define to the address where bug reports for this package should be sent. */
+#define PACKAGE_BUGREPORT "<bug@ulphi.com>"
+
+/* C++ namespace for this package */
+#define PACKAGE_NS @PROJECT_NAME@

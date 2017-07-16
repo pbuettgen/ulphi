@@ -1,0 +1,21 @@
+%%% -*- mode: LaTeX -*-
+%
+% Copyright © 2012-2015 Philipp Büttgenbach
+%
+% This file is part of ulphi, a CAE tool and library for computing
+% electromagnetic fields.
+%
+% All rights reserved.
+%
+% This program is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\newcommand*{\ProjectName}{@PROJECT_NAME@}
+\newcommand*{\ProjectVersion}{@PROJECT_VERSION@}
+
+%%% Local Variables: 
+%%% mode: LaTeX
+%%% ispell-local-dictionary: "en"
+%%% End:

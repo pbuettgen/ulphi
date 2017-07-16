@@ -1,0 +1,9 @@
+Document: ulphi
+Title: ulphi library documentation
+Author: Philipp Büttgenbach
+Abstract: ulphi is a C++ library for computing low frequency magnetic
+ fields.
+Section: Science/Engineering
+
+Format: PDF
+Files: /usr/share/doc/ulphi/manual.pdf.gz

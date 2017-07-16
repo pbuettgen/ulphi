@@ -1,0 +1,46 @@
+%%% -*- mode: LaTeX -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% ulphi.en.tex is part of ulphi, a CAE tool and library for computing
+% electromagnetic fields.
+%
+% All rights reserved.
+%
+% This program is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\begin{frame}{Coaxial line}{Results}
+  \begin{itemize}
+  \item Numerical and analytical solution match very well.
+  \end{itemize}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=.9\linewidth,
+      height=.5562305898749054\linewidth,
+      xlabel=${r}/{\milli\metre}\quad\longrightarrow$,
+      ylabel=$A\cdot\frac{\metre}{\micro\weber}\quad\longrightarrow$,
+      grid=major,
+      grid style={line width=.18mm},
+      tick style={line width=.35mm},
+      legend style={at={(0.95,0.95)},anchor=north east},
+      line width=.35mm]
+      \addplot[mark=diamond,only marks]
+      table[x=x, y=NumA] {../datasets/coaxial_line.csv};
+      \addplot[smooth,mark=none,line width=.7mm,style=dotted]
+      table[x=x, y=SymA] {../datasets/coaxial_line.csv};
+      \legend{numerical, analytical}
+    \end{axis}
+  \end{tikzpicture}
+  \vfil
+\end{frame}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: nil
+%%% ispell-local-dictionary: "en_US"
+%%% End: 

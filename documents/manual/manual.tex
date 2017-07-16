@@ -1,0 +1,117 @@
+% -*- coding: utf-8 -*-
+%
+% Copyright © 2012-2017 Philipp Büttgenbach
+%
+% This file is part of ulphi, a CAE tool and library for computing
+% electromagnetic fields.
+%
+% Permission is granted to copy, distribute and/or modify this
+% document under the terms of the \gls{gnu} Free Documentation
+% License, Version 1.3 or any later version published by the Free
+% Software Foundation; with no Invariant Sections, no Front-Cover
+% Texts, and no Back-Cover Texts.  A copy of the license is included
+% in the section entitled GNU Free Documentation License.
+%
+
+\NeedsTeXFormat{LaTeX2e}
+\documentclass[a4paper,11pt,twoside,xetex]{refrep}
+\usepackage{subfig}
+\usepackage[colorlinks]{hyperref}
+\usepackage[acronyms]{glossaries}
+\usepackage[algoruled]{algorithm2e}
+\usepackage{listings}
+\usepackage{booktabs}
+
+\input{../include/preamble-common.tex}
+
+\newcommand*{\Rm}{\gls{Rm}}
+\newcommand*{\kFe}{\gls{kFe}}
+\newcommand*{\dsheet}{\ensuremath{d_{\text{sheet}}}}
+\newcommand*{\xAir}[1]{\ensuremath{#1(\text{Air}})}
+\newcommand*{\xFe}[1]{\ensuremath{#1(\text{Fe}})}
+\newcommand*{\RmAir}{\xAir{\gls{Rm}}}
+\newcommand*{\RmFe}{\xFe{\gls{Rm}}}
+\newcommand*{\nuAir}{\xAir{\gls{nu}}}
+\newcommand*{\nuFe}{\xFe{\gls{nu}}}
+\newcommand*{\SAir}{\xAir{S}}
+\newcommand*{\SFe}{\xFe{S}}
+\newcommand*{\nueffpar}{\ensuremath{\nu_{\mathrm{eff}\,\parallel}}}
+\newcommand*{\nueffperp}{\ensuremath{\nu_{\mathrm{eff}\,\perp}}}
+\newcommand*{\Um}{\gls{Um}}
+\newcommand*{\rin}{\ensuremath{r_{\text{in}}}}
+\newcommand*{\rout}{\ensuremath{r_{\text{out}}}}
+\newcommand*{\pythonmarginlabel}{\marginlabel{\includegraphics[width=.25\marginparwidth]{../images/python-symbol.pdf}}}
+
+\lstset{texcl=true}
+
+\hypersetup{
+  pdftitle={\ProjectName{} User Manual},
+  pdfauthor={Philipp Büttgenbach},
+  pdfkeywords={Finite integrals, anisotropic magnetic, transformer core},
+  pdflang=en}
+
+\makeglossaries
+\renewcommand{\entryname}{Notation}
+\renewcommand{\descriptionname}{Function Name}
+\renewcommand{\pagelistname}{Number of Formula}
+\loadglsentries{Notation}
+
+\newacronym{cad}{CAD}{computer aided design}
+\newacronym{fdm}{FDM}{finite difference method}
+\newacronym{fem}{FEM}{finite element method}
+\newacronym{fd}{fd}{finite differences}
+\newacronym{fit}{FIT}{finite integration technique}
+\newacronym{fi}{FI}{finite integrals}
+\newacronym{gnu}{GNU}{GNU’s Not Unix}
+\newacronym{llc}{LLC}{lower left corner}
+\newacronym{urc}{URC}{upper right corner}
+
+\pagestyle{headings}
+
+\begin{document}
+%\setuplayouts
+\title{\parbox{\textwidth}{
+    \centering
+    \input{../images/Ulphi-logo.pdf_tex}\\[\bigskipamount] User Manual}}
+\author{\foreignlanguage{ngerman}{Philipp Büttgenbach}}
+\maketitle
+\begin{fullpage}
+  \thispagestyle{empty} \vfill Copyright \copyright{} 2012-2017
+  \foreignlanguage{ngerman}{Philipp Büttgenbach}.
+
+  Permission is granted to copy, distribute and/or modify this
+  document under the terms of the \gls{gnu} Free Documentation
+  License, Version 1.3 or any later version published by the Free
+  Software Foundation; with no Invariant Sections, no Front-Cover
+  Texts, and no Back-Cover Texts.  A copy of the license is included
+  in section~\ref{cha:gnu-free-docum}.
+
+  This manual is distributed in the hope that it will be useful, but
+  \emph{without any warranty}; without even the implied warranty of
+  \emph{merchantability} or \emph{fitness for a particular purpose}.
+\end{fullpage}
+\tableofcontents
+\listoffigures
+\printglossary[title={Index of Notations}]
+\printacronyms
+
+\include{Introduction}
+\include{General-Electromagnetic-Theory}
+\include{Discretization}
+\include{Linear-Poisson-Equation}
+\include{Important_Techniques_in_Electromagnetic_Modelling}
+\include{Practical-Aspects}
+\include{Examples}
+
+\begin{appendix}
+  \input{../include/fdl.tex}
+\end{appendix}
+
+\printbibliography
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: LaTeX
+%%% ispell-local-dictionary: "en"
+%%% End:

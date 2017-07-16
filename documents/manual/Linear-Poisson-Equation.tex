@@ -1,0 +1,103 @@
+% -*- coding: utf-8 -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% This file is part of ulphi, a CAE
+% tool and library for computing electromagnetic fields.
+%
+% Permission is granted to copy, distribute and/or modify this
+% document under the terms of the \gls{gnu} Free Documentation
+% License, Version 1.3 or any later version published by the Free
+% Software Foundation; with no Invariant Sections, no Front-Cover
+% Texts, and no Back-Cover Texts.  A copy of the license is included
+% in the section entitled GNU Free Documentation License.
+%
+% This manual is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\chapter{Linear \personname{Poisson} Equation}
+
+\section{Electrostatics}
+\label{sec:electrostatics}
+
+The \personname{Poisson} equation reads:
+\begin{align}
+  \laplaceop \phi &= \frac{\rho}{\epsilon} \\
+  \Leftrightarrow\quad\divop \grad \phi &= \frac{\rho}{\epsilon}
+\end{align}
+This equation is integrated by the theorem of \personname{Gauß}:
+\begin{gather}
+  \epsilon\oiinteg{S}{\grad \phi}{S} = \iiinteg{V}{\rho}{V} = Q
+  \label{eq:20}
+\end{gather}
+The $\grad$-operator is kept and not replaced by an integral
+expression.  This is alright because keeping this operator doesn't
+introduce any averaging of grid edges so that the advantages of using
+\gls{fit} pointed out at the begining of
+chapter~\ref{cha:discretization} are preserved.
+\begin{figure}
+  \centering
+  \input{../images/Poisson-grid-3D.tex}
+  \caption{A basic grid cell in 3D}
+  \label{fig:BasicGridCellPoisson3D}
+\end{figure}
+Figure~\ref{fig:BasicGridCellPoisson3D} shows a basic grid cell.
+Aplying equation~\eqref{eq:20} to this grid leads to:
+\newcommand*{\phiepsilonSl}[2]{
+  \ensuremath{\phi_{#1,#2}
+  \frac{\epsilon_{#1,#2}\cdot S_{#1,#2}}{l_{#1,#2}}}}
+\begin{multline}
+  +\phiepsilonSl{13}{14}+\phiepsilonSl{13}{16} \\
+  -\phiepsilonSl{12}{13}-\phiepsilonSl{10}{13} \\
+  +\phiepsilonSl{13}{22}-\phiepsilonSl{4}{13} = Q
+\end{multline}
+with
+\begin{align*}
+  l&\quad \text{the grid edge'es length} \\
+  S&\quad \text{Surface perpendicular to this edge}
+\end{align*}
+Doing so for all cells of a larger grid yields an equation system
+which has the same structure as \eqref{eq:18}:
+\begin{gather}
+  \matr{G}\vect{\phi}=\vect{\rho}\circ\vect{V}=\vect{Q}
+\end{gather}
+with
+\begin{gather}
+  \label{eq:32}
+  g=\epsilon\frac{S}{l}
+\end{gather}
+
+\section{Reduction to 2D}
+\label{sec:reduction-2d}
+
+\begin{itemize}
+\item We asume the homogeneous \personname{Neumann} condition on surface
+  $S_{13,22}$ and $S_{4,13}$.
+\item The grid shall have the fixed length $l_D$ in $z$-direction.
+\end{itemize}
+It follows that the source term is a surface charge
+density~\gls{sigma} and the coefficients forming the system matrix are
+\begin{gather}
+  \label{eq:22}
+  g=\frac{\tilde{\Delta}}{\Delta}\gls{epsilon}\text{~.}
+\end{gather}
+
+\section{Thermostatics}
+\label{sec:thermostatics}
+
+\begin{gather}
+  \label{eq:33}
+  \laplaceop T = -\frac{1}{\lambda}\partdiff{\gls{Phith}}{V}
+\end{gather}
+\begin{itemize}
+\item The source term is \gls{qth}
+\item $g=\frac{\tilde{\Delta}}{\Delta}\gls{lambdath}$
+\end{itemize}
+  
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "manual"
+%%% ispell-local-dictionary: "en_US"
+%%% End: 

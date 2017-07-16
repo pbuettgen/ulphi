@@ -1,0 +1,77 @@
+
+include(`forloop.m4')
+changecom(`%')
+
+define(`Node', `special |\draw #1 node [$2] {$1};| ($3,$4,$5)')
+define(`VertexNumber', `Node($1, below, $2, $3, $4)')
+define(`GridCellOptions', `[cull=false,line width=.35mm,fill=gray, fill opacity=.2]')
+
+def Dx 4.5
+def Dy 3.5
+def Dz 3.2
+def vs .5
+
+def CSys {
+    line [line width=.35mm,arrows=->] (0,0) (1,0)
+    line [line width=.35mm,arrows=->] (0,0) (0,1)
+    line [line width=.35mm,arrows=->] (0,0) (0,0,1)
+    Node(`$x$', below, 1, 0, 0)
+    Node(`$y$', below, 0, 1, 0)
+    Node(`$z$', above, 0, 0, 1)
+}
+
+def GridCell {
+    polygon GridCellOptions (0,0) (Dx,0) (Dx,Dy) (0,Dy)
+    polygon GridCellOptions (0,0) (0,0,Dz) (0,Dy,Dz) (0,Dy,0)
+    polygon GridCellOptions (0,0) (Dx,0,0) (Dx,0,Dz) (0,0,Dz)
+    polygon GridCellOptions (Dx,Dy) (Dx,0) (Dx,0,Dz) (Dx,Dy,Dz)
+    polygon GridCellOptions (Dx,Dy) (Dx,Dy,Dz) (0,Dy,Dz) (0,Dy,0)
+    polygon GridCellOptions (0,0,Dz) (Dx,0,Dz) (Dx,Dy,Dz) (0,Dy,Dz)
+}
+
+
+put { view((0,0,0), [6,2,-2], [0,0,1]) } {
+% Base plane
+polygon [cull=false,fill=none,line width=.18mm] (-Dx, -Dy) (Dx, -Dy) (Dx, Dy) (-Dx, Dy)
+
+polygon [cull=false,fill=lightgray, fill opacity=.1,line width=.18mm] (-Dx, -Dy, Dz) (Dx, -Dy, Dz) (Dx, Dy, Dz) (-Dx, Dy, Dz)
+polygon [cull=false,fill=lightgray, fill opacity=.1,line width=.18mm] (-Dx, 0, 0) (Dx, 0, 0) (Dx, 0, 2*Dz) (-Dx, 0, 2*Dz)
+polygon [cull=false,fill=lightgray, fill opacity=.1,line width=.18mm] (0, -Dy, 0) (0, Dy, 0) (0, Dy, 2*Dz) (0, -Dy, 2*Dz)
+
+repeat {2, translate ([0,0,Dz])} {
+    repeat {3, translate ([0,Dy,0])} {
+	repeat {3, translate ([Dx,0,0]) } {
+	    dots (-Dx,-Dy)
+	}
+    }
+}
+
+dots (Dx,0,2*Dz) (0,0,2*Dz) (-Dx,0,2*Dz) (0,-Dy,2*Dz) (0,Dy,2*Dz)
+
+forloop(`c', `0', `1',
+    `forloop(`b', `0', `2',
+	`forloop(`a', `0', `2', `VertexNumber(eval(9*c+3*b+a), eval(a-1)*Dx, eval(b-1)*Dy, c*Dz)
+')')')
+
+forloop(`a', `0', `2', `VertexNumber(eval(21+a), eval(a-1)*Dx, 0, 2*Dz)
+')
+
+VertexNumber(19, 0, -Dy, 2*Dz)
+VertexNumber(25, 0, Dy, 2*Dz)
+
+put { translate ([-Dx/2,-Dy/2,Dz/2]) } {GridCell}
+
+line [line width=.7mm, arrows=->] (-Dx+vs,0,Dz) (-vs,0,Dz)
+line [line width=.7mm, arrows=->] (vs,0,Dz) (Dx-vs,0,Dz)
+line [line width=.7mm, arrows=->] (0,-Dy+vs,Dz) (0,-vs,Dz)
+line [line width=.7mm, arrows=->] (0,vs,Dz) (0,Dy-vs,Dz)
+line [line width=.7mm, arrows=->] (0,0,vs) (0,0,Dz-vs)
+line [line width=.7mm, arrows=->] (0,0,Dz+vs) (0,0,2*Dz-vs)
+
+put { translate ([-5,-7]) } {CSys}
+}
+
+
+global {
+    language tikz
+}

@@ -1,0 +1,286 @@
+%%% -*- mode: LaTeX -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% ulphi.en.tex is part of ulphi, a CAE tool and library for computing
+% electromagnetic fields.
+%
+% All rights reserved.
+%
+% This program is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\NeedsTeXFormat{LaTeX2e}
+
+\documentclass[25pt,a0paper,innermargin=18mm]{tikzposter}
+
+\geometry{papersize={847mm,1195mm}}
+
+\input{../include/preamble-common.tex}
+
+\usepgfplotslibrary{groupplots}
+
+\newcommand*{\Um}{\ensuremath{U_{\mathrm{m}}}}
+
+ % Title, Author, Institute
+\title{\textbf{\sffamily A python module for magnetostatics}}
+\author{\sffamily Philipp Büttgenbach}
+%\institute{Institute}
+\titlegraphic{\includegraphics[height=11cm]{../images/Ulphi-logo.pdf}}
+
+ %Choose Layout
+% \usetheme{Autumn}
+% \usetheme{Basic}
+ \usetheme{Board}
+% \usetheme{Default}
+%\usetheme{Desert}
+% \usetheme{Envelope}
+% \usetheme{Rays}
+% \usetheme{Simple}
+% \usetheme{Wave}
+
+\begin{document}
+
+\maketitle
+ 
+\begin{columns}
+
+  \column{0.3}
+
+  \block{\sffamily What is it?}{
+    \begin{itemize}
+    \item Compute 2D magnetic fields
+    \item Static and quasistatic fields supported
+    \item Based on finite integration technique (FIT)
+    \item Targets at models with a rather simple geometry
+    \item Couple polar and cartesian sections in one model
+    \item Strong support for nonlinear and anisotropic materials
+    \end{itemize}
+  }
+
+  \block{\sffamily How does it work?}{
+    \innerblock{\sffamily Equations in magnetostatics}{
+      \begin{align*}
+        \label{eq:1}
+        \nabla\times\left(\nu\vect{B}\right) &= \vect{J}
+        &\Leftrightarrow&&
+        \ointeg{l}{\nu\vect{B}}{\vect{l}}&= \Theta \\
+        %% 
+        \nabla\times\vect{A} &= \vect{B} &\Leftrightarrow&&
+        \ointeg{l}{\vect{B}}{\vect{l}}&= \Phi
+      \end{align*}
+    }
+    \vspace{1em}
+    \innerblock{\sffamily A basic FIT grid}{
+      Discretization is done using the finite integration technique
+      (FIT). \par \vspace{2ex}
+      \begin{minipage}{\linewidth}
+        \centering\input{../images/FIT-Grid-3D-Large.pdf_tex}         
+      \end{minipage}
+    }
+    \vspace{1em}
+    \innerblock{\sffamily Coupling grids}{
+      Grid patches can be coupled even when having different types.
+      \begin{itemize}
+      \item Smooth transition from cartesian to polar sections
+      \item No interpolation of material properties necessary!
+      \end{itemize}
+      \vspace{1ex}
+      \centering\input{../images/Interface-polar-cartesian-Large.pdf_tex} 
+    }
+  }
+
+  \column{0.7}
+
+  \block{\sffamily Examples}{
+    \begin{minipage}[t]{.52\colwidth}
+      \innerblock{\sffamily Coaxial line}{
+        An analytical solution is
+        known and can be used to verify Ulphi:
+        \begin{multline*}
+          A(0)-A(r) = \frac{\mu_0J_1}{2} \\ \cdot
+          \begin{cases}
+            r^2/2 & r \le r_1\text{~,} \\
+            r_1^2\left(\frac{1}{2}+\ln\frac{r}{r_1}\right)
+            & r_1 < r \le r_2\text{~,} \\
+            r_1^2\left(\frac{1}{2}+\ln\frac{r_2}{r_1}
+              +\left(1+\frac{r_2^2}{r_3^2-r_2^2}\right)\ln\frac{r}{r_2}
+              +\frac{r^2-r_2^2}{2(r_3^2-r_2^2)}\right)
+            & r_2 < r \le r_3\text{~.} \\
+          \end{cases}
+        \end{multline*}
+
+        \begin{minipage}{.7\linewidth}
+          \centering
+          \begin{tikzpicture}
+            \begin{axis}[
+              title=Magnetic vector potential (z-component),
+              width=.85\linewidth,
+              height=.5253288904374106\linewidth,
+              xlabel=${r}/{\milli\metre}\quad\longrightarrow$,
+              ylabel=$A\cdot\frac{\metre}{\micro\weber}\quad\longrightarrow$,
+              xtick={0,5,...,20},
+              ytick={0,20,...,100},
+              legend style={at={(0.95,0.95)}, anchor=north east}, 
+              line width=.35mm]
+              \addplot[mark=diamond,only marks] table[x=x, y=NumA]
+              {../datasets/coaxial_line.csv}; 
+              \addplot[smooth,mark=none,line width=.7mm,style=dotted]
+              table[x=x, y=SymA] {../datasets/coaxial_line.csv}; 
+              \legend{numerical, analytical}
+            \end{axis}
+          \end{tikzpicture}
+        \end{minipage}
+        \begin{minipage}{.275\linewidth}
+          \centering
+          \begin{tikzpicture}
+            \fill[color=copper] (0,0) circle [radius=3cm];
+            \fill[white] (0,0) circle [radius=2.5cm];
+            \fill[color=copper] (0,0) circle [radius=.75cm];
+            \draw (0,0) node {$I_1$};
+            \draw (0, -1.5) node {$I_2=0$};
+            \draw[line width=.7mm,->] 
+            (-.75, -3.25) node[below] {$I_3=-I_1$} -- (-.5,-2.75);
+            \draw[line width=.7mm,<-] (45:.75)
+            -- (3.25,3.25)
+            -- (3.75,3.25) node[near start, above] {$r_1$};
+            \draw[line width=.7mm,<-] (21.037511025421818:2.5)
+            -- (3.25,1.25)
+            -- (3.75, 1.25) node[near start, above] {$r_2$};
+            \draw[line width=.7mm,<-] (-31.607502246248906:3)
+            -- (3.25,-2)
+            -- (3.75, -2) node[near start, above] {$r_3$};
+          \end{tikzpicture}
+        \end{minipage}
+      }
+    \end{minipage}
+    \begin{minipage}[t]{.42\colwidth}
+      \innerblock{\sffamily Simple iron core}{
+        Check of average flux density:
+        \begin{center}
+          \emph{Ulphi:} \unit{1.66}{\tesla} \hfil \emph{Average iron
+            path:} \unit{1.59}{\tesla}
+        \end{center}
+        \begin{itemize}
+        \item Ulphi can be trusted
+        \end{itemize}
+        \vfil \centering
+        \begin{tikzpicture}
+          \begin{axis}[
+            title={$A\cdot\frac{\metre}{\milli\weber}$},
+            width=.8\linewidth,
+            axis equal={true},
+            xmin={0},
+            xmax=50,
+            ymin=-5,
+            ymax=60,
+            xtick={-10,0,...,60},
+            ytick={-10,0,...,60},
+            xlabel=$x/{\milli\metre}\quad\longrightarrow$,
+            ylabel=$y/{\milli\metre}\quad\longrightarrow$,
+            grid=major,
+            grid style={line width=.18mm},
+            tick style={line width=.35mm},
+            line width=.35mm]
+            %% iron core shape
+            \addplot[gray,fill=gray!20,opacity=.33,line width=.7mm] 
+            coordinates {
+              (15,0) (40,0) (40,54) (0, 54) (0, 29) (15,29)} -- cycle;
+            %% coils
+            \addplot[copper,fill=copper,opacity=.33,line width=.7mm]
+            coordinates {(5,0) (10,0) (10,24) (5,24)} -- cycle;
+            \addplot[copper,fill=copper,opacity=.33,line width=.7mm]
+            coordinates { (45,0) (50,0) (50,24) (45,24)} -- cycle;
+            \addplot[contour gnuplot, line width=.7mm]
+            table[x=x, y=y, z=potential] {../datasets/simple_iron_core.csv};
+          \end{axis}
+        \end{tikzpicture}
+      }
+    \end{minipage}
+    \innerblock{\sffamily Wound iron core}{
+      \hfil
+      \begin{tabular}[b]{cc}
+        \input{../images/Wound-iron-core-Large.pdf_tex} &
+        \input{../images/wound-iron-core-model-Large.pdf_tex}
+        \tabularnewline[1ex]
+        Device & Model \vspace{5ex}
+      \end{tabular}
+      \hfil
+      \begin{tikzpicture}
+        \begin{groupplot}[
+          group style={group size=1 by 2, vertical sep=12ex},
+          width=.3\linewidth,
+          height=.18541019662496844\linewidth]
+          \nextgroupplot[
+          title={magnetomotive force},
+          xlabel=$t/{\milli\second}\quad\longrightarrow$,
+          ylabel=$\Um/{\kilo\ampere}\quad\longrightarrow$,
+          xtick={-5,0,...,30},
+          legend style={at={(0.95,0.95)},anchor=north east},
+          line width=.35mm]
+          \addplot[line width=.7mm] table[x=t,
+          y=y1]{../datasets/wound_iron_core_time.csv}; 
+          \addplot[smooth, line
+          width=.7mm, style=dashed] table[x=t,
+          y=y2]{../datasets/wound_iron_core_time.csv}; 
+          \legend{waveform, fundamental}
+          \nextgroupplot[
+          title={magnetomotive force (spectrum)},
+          xlabel=harmonic order$\quad\longrightarrow$,
+          ylabel=$\Um/{\kilo\ampere}\quad\longrightarrow$,
+          xtick={-20,-15,...,20},
+          ytick={0,.1,...,.5},
+          line width=.35mm]
+          \addplot[ycomb, line width=.7mm]
+          table{../datasets/wound_iron_core_freq.csv};
+        \end{groupplot}
+      \end{tikzpicture}
+      \hfil
+    } 
+  }
+
+\block{\sffamily Ideas for future development}{
+  \begin{itemize}
+  \item Permanent magnets
+  \item Force (and torque) evaluation
+  \item Implement linear Laplace equation (required for electrostatics
+    and thermostatics)
+  \item High frequency FIT
+  \item Graphical user interface
+  \end{itemize}
+}
+
+
+\end{columns}
+
+\begin{columns}
+  \column{.5}
+  \block{\sffamily References}{
+    \nocite{Salon:1995}
+    \nocite{Silvester:1996}
+    \nocite{Weiland:1977}
+    \nocite{vanRienen:2010}
+    \printbibliography[title={\relax}]
+  }
+  \column{.5}
+  \block{\sffamily Acknowledgement}{
+    Thanks a lot to my parents for sponsoring my trip to Erlangen.
+  }
+  \block{\relax}{
+    \hfil
+    \includegraphics[height=4cm]{../images/python-cpp-logo.png} \hfil
+    \includegraphics[height=4cm]{../images/boost-library-logo.png} \hfil
+    \includegraphics[height=4cm]{../images/Eigen-logo_silly-professor.png} \hfil
+    \includegraphics[height=4cm]{../images/imprint-logo_Wir-machen-druck.png} \hfil
+  }
+\end{columns}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: nil
+%%% ispell-local-dictionary: "en_US"
+%%% End: 

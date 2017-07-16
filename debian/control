@@ -1,0 +1,46 @@
+Source: ulphi
+Priority: optional
+Maintainer: Philipp Büttgenbach <Philipp.Buettgenbach@gmx.de>
+Build-Depends: debhelper (>= 10), cmake (>=3.6), g++ (>=6.0) | clang (>=3.8), doxygen (>=1.8.6), doxygen-latex, imagemagick, inkscape (>=0.48), libeigen3-dev (>=3.2.1), python3-dev (>=3.2), libloki-dev (>=0.1.7), googletest (>=1.7), dh-python
+Standards-Version: 3.9.8
+Section: contrib/libs
+Homepage: https://github.com/pbuettgen/ulphi
+#Vcs-Git: git://anonscm.debian.org/collab-maint/neumann.git
+#Vcs-Browser: http://anonscm.debian.org/?p=collab-maint/neumann.git;a=summary
+
+Package: ulphi-dev
+Section: contrib/libdevel
+Architecture: any
+Depends: libeigen3-dev (>=3.2.1), libboost-dev (>=1.63), libloki-dev (>=0.1.7), ${misc:Depends}
+Recommends: libulphi1 (=${binary:Version})
+Suggests: ulphi-doc
+Description: Compute magnetic fields in 2D.
+ ulphi is a library for computing low frequency magnetic fields.
+ .
+ This package contains development files.
+
+Package: libulphi1
+Section: contrib/libs
+Architecture: any
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Compute magnetic fields in 2D.
+ ulphi is a library for computing low frequency magnetic fields.
+
+Package: ulphi-doc
+Architecture: all
+Section: contrib/doc
+Depends: ${misc:Depends}
+Description: Compute magnetic fields in 2D.
+ ulphi is a library for computing low frequency magnetic fields.
+ .
+ This package contains the documentation.
+
+Package: python3-ulphi
+Architecture: any
+Section: contrib/python
+Depends: ${python3:Depends}, ${shlibs:Depends}, ${misc:Depends}, python3-pint (>=0.7)
+Description: Compute magnetic fields in 2D.
+ ulphi is a library for computing low frequency magnetic fields.
+ .
+ This package contains the python language bindings.

@@ -1,0 +1,37 @@
+%%% -*- mode: LaTeX -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% ulphi.en.tex is part of ulphi, a CAE tool and library for computing
+% electromagnetic fields.
+%
+% All rights reserved.
+%
+% This program is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\begin{frame}{Coaxial line}{Analytical solution}
+  \begin{multline*}
+    A(0)-A(r) = \frac{\mu_0J_1}{2} \\ \cdot
+    \begin{cases}
+      r^2/2 & r \le r_1\text{~,} \\
+      r_1^2\left(\frac{1}{2}+\ln\frac{r}{r_1}\right)
+      & r_1 < r \le r_2\text{~,} \\
+      r_1^2\left(\frac{1}{2}+\ln\frac{r_2}{r_1}
+        +\left(1+\frac{r_2^2}{r_3^2-r_2^2}\right)\ln\frac{r}{r_2}
+        +\frac{r^2-r_2^2}{2(r_3^2-r_2^2)}\right)
+      & r_2 < r \le r_3\text{~.} \\
+    \end{cases}
+  \end{multline*}
+  \vfill
+  \centering
+  \input{../images/Coaxial-Line.pdf_tex}
+\end{frame}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: nil
+%%% ispell-local-dictionary: "en_US"
+%%% End: 
