@@ -1,6 +1,6 @@
 Source: ulphi
 Priority: optional
-Maintainer: Philipp Büttgenbach <Philipp.Buettgenbach@gmx.de>
+Maintainer: Philipp Büttgenbach <ulphi@ist-einmalig.de>
 Build-Depends: debhelper (>= 10), cmake (>=3.6), g++ (>=6.0) | clang (>=3.8), doxygen (>=1.8.6), doxygen-latex, imagemagick, inkscape (>=0.48), libeigen3-dev (>=3.2.1), python3-dev (>=3.2), libloki-dev (>=0.1.7), googletest (>=1.7), dh-python
 Standards-Version: 3.9.8
 Section: contrib/libs
