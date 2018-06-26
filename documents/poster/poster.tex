@@ -20,6 +20,8 @@
 
 \input{../include/preamble-common.tex}
 
+\usepackage{url}
+
 \usepgfplotslibrary{groupplots}
 
 \newcommand*{\Um}{\ensuremath{U_{\mathrm{m}}}}
@@ -27,7 +29,7 @@
  % Title, Author, Institute
 \title{\textbf{\sffamily A python module for magnetostatics}}
 \author{\sffamily Philipp Büttgenbach}
-%\institute{Institute}
+\institute{\url{https://www.github.com/pbuettgen/ulphi} --- \url{mailto:ulphi@ist-einmalig.de}}
 \titlegraphic{\includegraphics[height=11cm]{../images/Ulphi-logo.pdf}}
 
  %Choose Layout
@@ -104,11 +106,11 @@
           \begin{cases}
             r^2/2 & r \le r_1\text{~,} \\
             r_1^2\left(\frac{1}{2}+\ln\frac{r}{r_1}\right)
-            & r_1 < r \le r_2\text{~,} \\
+            & r_1 < r \le r_2\text{~,} \\[.5ex]
             r_1^2\left(\frac{1}{2}+\ln\frac{r_2}{r_1}
               +\left(1+\frac{r_2^2}{r_3^2-r_2^2}\right)\ln\frac{r}{r_2}
               +\frac{r^2-r_2^2}{2(r_3^2-r_2^2)}\right)
-            & r_2 < r \le r_3\text{~.} \\
+            & r_2 < r \le r_3\text{~.}
           \end{cases}
         \end{multline*}
 
@@ -266,7 +268,8 @@
   }
   \column{.5}
   \block{\sffamily Acknowledgement}{
-    Thanks a lot to my parents for sponsoring my trip to Erlangen.
+    Thanks a lot to my parents for sponsoring my trip to EuroScipy
+    2016 in Erlangen.
   }
   \block{\relax}{
     \hfil
