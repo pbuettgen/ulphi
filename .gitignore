@@ -1,11 +1,7 @@
-# Prerequisites
-*.d
-
 # Compiled Object files
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -16,20 +12,11 @@
 *.dylib
 *.dll
 
-# Fortran module files
-*.mod
-*.smod
-
 # Compiled Static libraries
 *.lai
 *.la
 *.a
 *.lib
-
-# Executables
-*.exe
-*.out
-*.app
 
 # Build directory
 build/
@@ -45,8 +32,14 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 
+# SCons
+.sconsign.dblite
+
 # LaTeX / AucTeX
-documents/*/auto/
+docs/*/auto/
 
 # Images
 documents/images/*_backup.svg
+
+# Python
+__pycache__
