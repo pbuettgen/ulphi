@@ -1,0 +1,409 @@
+% -*- coding: utf-8 -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% This file is part of ulphi, a CAE tool and library for
+% computing electromagnetic fields.
+%
+% Permission is granted to copy, distribute and/or modify this
+% document under the terms of the \gls{gnu} Free Documentation
+% License, Version 1.3 or any later version published by the Free
+% Software Foundation; with no Invariant Sections, no Front-Cover
+% Texts, and no Back-Cover Texts.  A copy of the license is included
+% in the section entitled GNU Free Documentation License.
+%
+% This manual is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\chapter{Discretization -- The  \glsentrytext{fit}}
+\label{cha:discretization}
+
+Unfortunately, the equations from the previous section can only be
+solved in a limited number of cases in a closed form.  In the general
+case they are discretized, that is the computation domain is
+subdivided by a grid or mesh, and solved numerically. Here we are
+going to use the \gls{fit}. \par
+Originally the \gls{fit} was developed to compute especially high
+frequency electromagnetic fields as they accure in radio frequency
+particle accelerators \parencite{Weiland:1977}.  In that case it uses
+the full set of equations~\eqref{eq:1} throw \eqref{eq:2}.
+Nevertheless it can be seen as a much more general method and adapted
+to other field equations as it is shortly pointed out by \cite[section
+3.4.2]{vanRienen:2010}. \par
+Compared to the \gls{fdm} it has some important advantages:
+\begin{itemize}
+\item The resulting system matrix is always symmetric, also for non
+  equidistant grids.  This is an important property on which many
+  sparse system solvers rely.
+\item Coupling grids of different type (cartesian and polar) is very
+  easy and natural to implement and there is a smooth transition in
+  the coefficients.
+\end{itemize}
+\par
+The finite integral method starts with the equations from section 2 in
+their integral form. The computation domain is subdivided by a grid
+and the grid’s edges become the integral’s integration path
+(figure~\ref{fig:FIT-grid-3D}).
+\begin{figure}
+  \centering
+  \subcaptionbox{
+    Three dimensional \gls{fit} grid for equation~\eqref{eq:4}\label{fig:FIT-grid-3D}} {
+    \includeinkscape{FIT-grid-3D}
+  }
+  \\ \bigskip
+  \subcaptionbox{
+    Two dimensional projection to the $x$-$y$-plane\label{fig:FIT-grid-2D}} {
+    \includeinkscape{FIT-grid-2D}
+  }
+  \caption{Elementary \gls{fit} grid in magnetostatic applications}
+\end{figure}
+In the case where a computation in two dimensions is sufficient, this
+grid is projected to a plane (figure~\ref{fig:FIT-grid-2D}).
+All entities in this grid are referred to by their row and column index:
+\begin{description}
+\item[$m$] row index $m\in\left[0\dots\xmax{m}\right]$
+\item[$n$] column index $n\in\left[0\dots\xmax{n}\right]$
+\end{description}
+Using equation~\eqref{eq:4} in its integral form the flux density
+inside such a grid computes as
+\begin{gather}
+  \label{eq:9}
+  \left[-A_z(m,n)+A_z(m+1,n)\right]\cdot\gls{lD}=\Phi_y(m,n)\text{~,}
+  \intertext{and with}
+  \Phi_y(m,n)=B_x(m,n)\cdot\gls{lD}\cdot\Delta_y(m)
+\end{gather}
+it follows
+\begin{subequations}
+  \begin{align}
+    B_x(m,n)&=\frac{1}{\Delta_y(m)}\left[A_z(m+1,n)-A_z(m,n)\right]
+    \intertext{Analogously it is}
+    \label{eq:10}
+    B_y(m,n)&=\frac{1}{\Delta_x(n)}\left[A_z(m,n)-A_z(m,n+1)\right]\text{~.}
+  \end{align}
+\end{subequations}
+\par The outer rotation in equation~\eqref{eq:5} forms a
+secondary or inner grid.  This grid has the following properties
+\footnote{All the secondary grid's properties are marked by $\tilde{{}}$.}:
+\begin{align}
+  \tilde{\Delta}_{x}(n)
+  &=\frac{1}{2}\cdot\left[x(n+1)-x(n-1)\right] \\
+  \tilde{\Delta}_{y}(m)
+  &=\frac{1}{2}\cdot\left[y(m+1)-y(m-1)\right]
+  \intertext{A grid cell's area is given by}
+  \label{eq:13}
+  \tilde{S}(m,n)
+  &=\tilde{\Delta}_x(n)\cdot\tilde{\Delta}_y(m)
+\end{align}
+Polar coordinates:
+\begin{align}
+  \label{eq:14}
+  \tilde{\Delta}_{r}(n)&=\frac{1}{2}\left[r(n+1)-r(n-1)\right] \\
+  \tilde{\Delta}_{\phi}(m)&=\frac{1}{2}\left[\phi(m+1)-\phi(m-1)\right]\\
+  \tilde{r}(n) &= \frac{1}{2}\left[r(n+1)+r(n)\right] \\
+  \tilde{S}(m,n) &= \frac{\tilde{\Delta}_{\phi}(m)}{2}
+  \left[\tilde{r}^{2}(n+1)-\tilde{r}^{2}(n)\right]
+\end{align}
+Writing out the equations for the grid in figure~\ref{fig:FIT-grid-2D}
+yields:
+\begin{align*}
+  B_x(\tilde{0})&=\frac{1}{\Delta_y(1)}\left[A_z(4)-A_z(1)\right] \\
+  B_x(\tilde{3})&=\frac{1}{\Delta_y(4)}\left[A_z(7)-A_z(4)\right] \\
+  B_y(\tilde{0})&=\frac{1}{\Delta_x(3)}\left[A_z(3)-A_z(4)\right] \\
+  B_y(\tilde{1})&=\frac{1}{\Delta_x(4)}\left[A_z(4)-A_z(5)\right]
+\end{align*}
+And finally:
+\begin{multline*}
+  B_x(\tilde{0})\nu_x(\tilde{0})\tilde{\Delta}_x(\tilde{0})
+  +B_y(\tilde{1})\nu_y(\tilde{1})\tilde{\Delta}_y(\tilde{1}) \\
+  -B_x(\tilde{3})\nu_x(\tilde{3})\tilde{\Delta}_x(\tilde{3})
+  -B_y(\tilde{0})\nu_y(\tilde{0})\tilde{\Delta}_y(\tilde{0}) = J(4)\cdot\tilde{S}(4)
+\end{multline*}
+Now the following coefficients are introduced:
+\begin{align}
+  \label{eq:16}
+  g_y(1)&=\frac{\tilde{\Delta}_x(\tilde{0})}{\Delta_y(1)}\nu_x(1) &
+  g_x(4)&=\frac{\tilde{\Delta}_y(\tilde{1})}{\Delta_x(4)}\nu_y(4) \\
+  g_y(4)&=\frac{\tilde{\Delta}_x(\tilde{3})}{\Delta_y(4)}\nu_x(4) &
+  g_x(3)&=\frac{\tilde{\Delta}_y(\tilde{0})}{\Delta_x(3)}\nu_y(3)
+\end{align}
+And now:
+\begin{multline}
+  \label{eq:17}
+  \left[g_y(1)+g_x(4)+g_y(4)+g_x(3)\right] A_z(4) \\
+  -g_y(1)A_z(1)-g_x(4)A_z(5)-g_y(4)A_z(7)-g_xA_z(3) = J(4)\tilde{S}(4)
+\end{multline}
+This equation can be expressed in matrix form as
+\begin{gather}
+  \label{eq:18}
+  \matr{G}\vect{A}=\vect{J}\circ\vect{S}=\vect{\Theta}
+\end{gather}
+what is especially useful for larger grids.  The system matrix has a
+special structure which makes it easy to directly generate it from the
+grid (algorithm~\ref{alg:1}).\footnote{If you are familiar to the
+  nodal analysis of electrical networks, you will probably notice that
+  the rules are quite similar.}
+\begin{algorithm}
+  \ForAll{vertices $v$}{
+    \ForAll{out edges $e$ of $v$}{
+      $\tilde{e}=\text{secondary grid's crossing edge}$\;
+      $l_{\text{sec}}=\operatorname{length}(\tilde{e})$\;
+      $l_{\text{prim}}=\operatorname{length}(e)$\;
+      $g=\nu\cdot l_{\text{sec}}/l_{\text{prim}}$\;
+      %
+      $\vect{G}(\operatorname{source}(e),\operatorname{target}(e))=-g$\;
+      %
+      $\vect{G}(\operatorname{source}(e),\operatorname{source}(e))+=g$\;
+    }
+  }
+\caption{Generation of matrix entries for a grid's inner node.}
+\label{alg:1}
+\end{algorithm}
+
+
+\section{Field Dependent Reluctivity}
+\label{sec:field-depend-reluct}
+
+Nonlinear material properties appear frequently in magnetic
+calculations.  So it is nessesary to deal with them.  Usually an
+iterative process is used to solve the nonlinear equations.
+
+\subsection{Simple Iteration}
+\label{sec:simple-iteration}
+
+The simplest way to handle nonlinear material properties is to
+iteratively resolve \eqref{eq:18} and adjust the reluctivity after each
+step.  It is also possible to implement a damped variant where a
+weighted average of the solution and previous solution is computed.
+This algorithm has the following advantages and
+disadvantages:\footnote{See \parencite[chapter 5]{Silvester:1996} for
+  a more detailed discussion}
+\begin{description}
+\item[Advantage]
+  \begin{itemize}
+  \item Simple, no derivation required
+  \end{itemize}
+\item[Disadvantage]
+  \begin{itemize}
+  \item slow convergence
+  \item no certain way for error estimation
+  \end{itemize}
+\end{description}
+
+
+\subsection{\personname{Newton} Iteration}
+\label{sec:newton-iteration}
+
+The \personname{Newton} procedure \parencite{Wikipedia:Newton} is
+described by the following equation: \index{Newton procedure|emph}
+\begin{gather}
+  \label{eq:21}
+  \vect{A}(q+1)=\vect{A}(q)-\jacmatr^{-1}\cdot\vect{f}(\vect{A}(q))\text{~.}
+\end{gather}
+with
+\begin{gather*}
+  \vect{f}(\vect{A}(q))=\matr{G}\vect{A}(q)-\vect{\Theta}
+\end{gather*}
+and
+\begin{align*}
+  \jacmatr 
+  & \quad\text{\personname{Jacobi} matrix of $\vect{f}(\vect{A})$,} \\
+  \gls{q} & \quad\text{the \glsdesc{q}.}
+\end{align*}
+Of course we want to avoid computing the inverse of the
+\personname{Jacobi} matrix \jacmatr{} -- a big sparse matrix -- due to its
+computational costs.  So we reformulate \eqref{eq:21} as
+\begin{gather}
+  \label{eq:41}
+  [\upDelta\vect{A}](q)=\vect{A}(q+1)-\vect{A}(q)\text{~,} \\
+  \jacmatr\cdot[\upDelta\vect{A}](q)=-\vect{f}(\vect{A}(q))\text{~.}
+\end{gather}
+This system of equations can be solved for $[\upDelta\vect{A}](q)$ by some
+suitable method like the conjugate gradient method.
+\par To solve this system of equations we need the Jacobian matrix's
+entries.  The \personname{Jacobi} matrix
+\index{Jacobi matrix@\personname{Jacobi} matrix|emph} is defined as
+\begin{gather}
+  \label{eq:29}
+  \jacmatr =
+  \begin{pmatrix}
+    \partdiff{f_0}{A_0} & \partdiff{f_0}{A_1} & \dots &
+    \partdiff{f_0}{A_{\xmax{n}}} \\
+    \partdiff{f_1}{A_0} & \partdiff{f_1}{A_1} & \dots &
+    \partdiff{f_1}{A_{\xmax{n}}} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    \partdiff{f_{\xmax{m}}}{A_0} & \partdiff{f_{\xmax{m}}}{A_1} &
+    \dots & \partdiff{f_{\xmax{m}}}{A_{\xmax{n}}}
+  \end{pmatrix}\text{~.}
+\end{gather}
+A single entry of this matrix is
+\begin{gather}
+  \label{eq:23}
+  f_m=-\Theta_m+\sum_{k=0}^{\xmax{n}}g_{mk}A_k
+\end{gather}
+with the derivation
+\begin{gather}
+  \label{eq:24}
+  \partdiff{f_m}{A_n}
+  =\left(\sum_{k=0}^{\xmax{n}}\partdiff{}{A_n}g_{mk}A_k\right)
+\end{gather}
+Let's analyse this derivation in parts.
+\begin{gather}
+  \label{eq:26}
+  \sum_{k=0}^{\xmax{n}}\partdiff{}{A_n}g_{mk}A_k
+  =\sum_{k=0}^{\xmax{n}}\left(\partdiff{g_{mk}}{A_n}A_k
+    +g_{mk}\partdiff{A_k}{A_n}\right)
+\end{gather}
+The second term evaluates to
+\begin{gather}
+  \label{eq:27}
+  g_{mk}\partdiff{A_k}{A_n}=
+  \begin{cases}
+    g_{mk} & k = n \\
+    0     & k \ne n
+  \end{cases}
+\end{gather}
+and thereby only appears on the diagonal.  In the first term it is
+nessesary to apply the chain rule of differentiation because $g_{mk}$
+depends indirectly on $A_n$:
+\begin{gather}
+  \label{eq:28}
+  \partdiff{g_{mk}}{A_n}A_k=\partdiff{g_{mk}}{B}\partdiff{B}{A_n}\cdot
+  A_k=\pm\frac{\tilde{\Delta}}{\Delta^2}\partdiff{\nu}{B}\cdot A_k
+\end{gather}
+Despite this lengthy calculation the final result is rather simple.
+First of all, the \personname{Jacobi} matrix has the same structure as
+the system matrix \matr{G}:  Elements which are zero in \matr{G} are also zero
+in \jacmatr.
+Further it turns out that every edge -- beside the already introduced
+coefficient $g$ -- has attached a jacobi coefficient $g_{\mathrm{J}}$ which is
+\begin{gather}
+  \label{eq:11}
+  g_{\mathrm{J}}=g+\frac{\tilde{\Delta}}{\Delta}B\partdiff{\nu}{B}
+\end{gather}
+With this definition the \personname{Jacobi} matrix can be generated
+in the same way as the system matrix (algorithm~\ref{alg:1}).
+
+\subsubsection{Damped \personname{Newton} Procedure}
+\label{sec:damp-newt-proc}
+
+It is possible to introduce a \glsdesc{delta}~\gls{delta} into the
+\personname{Newton} process:
+\begin{gather}
+  \label{eq:30}
+  \vect{A}(q+1)=\vect{A}(q)+\delta\cdot[\upDelta\vect{A}](q)
+\end{gather}
+The damping factor is chosen so that
+\begin{gather}
+  \label{eq:31}
+  \delta\le\min\left(1,
+    \frac{\vectnorm{[\upDelta\vect{A}](q-1)}}{\vectnorm{[\upDelta\vect{A}](q)}}\right)\text{~.}
+\end{gather}
+So, if the error becomes bigger in the current step than in the last
+step then the damping factor is reduced.
+
+\section{Boundary Conditions}
+\label{sec:bound-treatm-cond}
+
+\subsection{\personname{Neumann} Boundary Condition}
+\label{sec:neumann}
+
+The \personname{Neumann} condition is about setting the first
+derivative to a prescribed value.  In the case considered here, this
+means nothing else then presetting the magnetic flux density parallel
+to the boundary.
+\begin{figure}
+  \centering
+  \includeinkscape{Neumann-Boundary}
+  \caption{Boundary with a \personname{Neumann} condition}
+  \label{fig:neumann-boundary}
+\end{figure}
+Figure~\ref{fig:neumann-boundary} shows how the \personname{Neumann}
+condition is applied in the context of finite integrals.  The
+integration path around the boundary vertex is in parts a ``ghost'' path
+because it lies outside the computation domain.  It is choosen in such
+a way that the surounded vertex is at its center.  \par The relevant
+equations for a \personname{Neumann} vertex are:
+\begin{align*}
+  B_x(3)&=\frac{1}{\Delta_y(3)}\left[A_z(6)-A_z(3)\right]  \\
+  B_y(3)&=\frac{1}{\Delta_x(3)}\left[A_z(3)-A_z(4)\right]  \\
+  B_x(0)&=\frac{1}{\Delta_y(0)}\left[A_z(3)-A_z(0)\right]
+\end{align*}
+And finally:
+\begin{gather}
+  \label{eq:19}
+  B_y(3)g_x(3)-B_x(3)g_y(3)+B_x(0)g_y(0)
+    =J_z(3)\tilde{S}(3)+B_{\text{out}}\nu_{\text{out}}l_{\text{out}}
+\end{gather}
+So, the \personname{Neumann} boundary condition modifies the
+equation's right hand side.  In the case of the homogenious
+\personname{Neumann} boundary condition
+($B_{\text{out}}=\qty{0}{\tesla}$) it is the same equation as for a
+grid's inner vertex.  That means the homogenious \personname{Neumann}
+condition arises automatically if no other condition is set.
+\emph{Important:}  The sign of the right hand side's modification term
+depends onto the boundary:
+\begin{gather*}
+  \text{sign}=
+  \begin{cases}
+    -1 & \text{the boundary is parallel to the axis} \\
+    +1 & \text{the boundary is \emph{anti}parallel to the axis}
+  \end{cases}
+\end{gather*}
+
+\subsection{\personname{Dirichlet} Boundary Condition}
+\label{sec:dirichlet}
+
+The \personname{Dirichlet} boundary condition describes the case that no flux
+crosses the boundary.  In other words the flux perpendicular to the
+boundary is zero or -- expessed in terms of the magnetic vector
+potential -- the magnetic vector potential along the boundary has a
+constant prescribed value (figure~\ref{fig:diri-condition}).
+\begin{figure}
+  \centering
+  \includeinkscape{Dirichlet-Boundary}
+  \caption{Boundary with a \personname{Dirichlet} condition}
+  \label{fig:diri-condition}
+\end{figure}
+ Because the potential is known in advance
+the vertice's equation can be eleminated from \eqref{eq:18}:
+\begin{multline}
+  \left[g_x(n)+g_y(n)+g_x(n-1)+g_y(n-\xmax{m})\right]A_z(n) \\
+  -g_x(n)A_z(n+1)-g_y(n)A_z(n+\xmax{m})-g_y(n-\xmax{m})A_z(n-\xmax{m}) \\
+  = J_n\tilde{S}_n+g_x(n-1)A_z(n-1)
+\end{multline}
+This leads to algorithm~\ref{alg:2} for adding \personname{Dirichlet}
+vertices to the equation system.
+\begin{algorithm}
+  \ForAll{$\operatorname{out\_edges}(\text{\personname{Dirichlet}
+      vertex})$}{
+    Add $g\cdot A_z$ to the equation's right hand side of the target
+    vertex\;
+  }
+  \caption{Add \personname{Dirichlet} vertices to the equation system}
+  \label{alg:2}
+\end{algorithm}
+
+\section{Coupled Boundaries}
+\label{sec:coupled-boundaries}
+
+With finite integrals the implementations of boundary coupling is so
+natural that it is almost not worth to mention it at all.
+\begin{figure}
+  \centering
+  \includeinkscape{Interface-polar-cartesian}
+  \caption{Interface between a cartesian and polar grid patch}
+  \label{fig:polar-cartesian}
+\end{figure}
+Figure~\ref{fig:polar-cartesian} shows how two grids patches can be
+coupled.  Only the calculation of the integration path'es length and
+the surrounded surface area must be adjusted.  
+% \par Coming soon: Antiperiodic coupling.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "manual"
+%%% ispell-local-dictionary: "en_US"
+%%% End: 

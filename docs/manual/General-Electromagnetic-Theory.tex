@@ -1,0 +1,91 @@
+% -*- coding: utf-8 -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% This file is part of ulphi, a CAE
+% tool and library for computing electromagnetic fields.
+%
+% Permission is granted to copy, distribute and/or modify this
+% document under the terms of the \gls{gnu} Free Documentation
+% License, Version 1.3 or any later version published by the Free
+% Software Foundation; with no Invariant Sections, no Front-Cover
+% Texts, and no Back-Cover Texts.  A copy of the license is included
+% in the section entitled GNU Free Documentation License.
+%
+% This manual is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\chapter{General Electromagnetic Theory}
+\label{cha:gener-electr-theory}
+
+Electromagnetic fields are generally described by
+\personname{Maxwell}'s equations.  Using \personname{Gauß}' and
+\personname{Stockes}' theorem, these equations can be converted from
+their differential form into an integral form:
+\begin{align}
+  \label{eq:1}
+  \nabla\cdot\vect{\gls{B}}&=0 &\Leftrightarrow&&
+  \oiinteg{\gls{S}}{\vect{B}}{\vect{S}}&=0 \\
+  %% 
+  \nabla\cdot\vect{D}&=\varrho &\Leftrightarrow&&
+  \oiinteg{\gls{S}}{\vect{\gls{D}}}{\vect{S}}&=\gls{Q} \\
+  %% 
+  \label{eq:7}
+  \nabla\vectimes\vect{\gls{E}}&=-\partdiff{\vect{B}}{t} &\Leftrightarrow&&
+  \ointeg{l}{\vect{\gls{E}}}{\vect{l}}&=-\partdiff{\gls{Phi}}{t} \\
+  %%
+  \label{eq:2}
+  \nabla\vectimes\vect{\gls{H}}&=\vect{\gls{J}}+\partdiff{\vect{D}}{t}
+  &\Leftrightarrow&&
+  \ointeg{l}{\vect{H}}{\vect{l}}&= \gls{Theta} + \partdiff{\gls{Psi}}{t}
+\end{align}
+In low frequency applications, that means a frequency below about one
+kilohertz, displacement currents can be generally ignored.  There\-by
+equation~\eqref{eq:2} simplyfies to
+\begin{gather}
+  \label{eq:3}
+  \nabla\vectimes\vect{H}=\vect{J}\text{~.}
+\end{gather}
+Next a magnetic vector potential is introduced:
+\begin{gather}
+  \label{eq:4}
+  \nabla\vectimes\gls{A}=\vect{B}\quad\Leftrightarrow\quad
+  \ointeg{l}{\vect{A}}{\vect{l}}=\Phi\text{~.}
+\end{gather}
+By this definition equation~\eqref{eq:1} is fulfilled automatically.
+This potential is ambiguous because
+\begin{gather}
+  \label{eq:8}
+  \nabla\vectimes\left(\vect{A}+\nabla F\right)
+  =\nabla\vectimes\vect{A}+\nabla\vectimes\left(\nabla F\right)
+  =\nabla\vectimes\vect{A}\text{~,}
+\end{gather}
+where $F$ is some scalar field.
+To make this potential unique
+\begin{itemize}
+\item a gauge like $\nabla\cdot\vect{A}=0$ can be enforced
+\item the potential may be preset at least at one point inside the
+  computation domain or its boundary.  This is the case when a
+  \personname{Dirichlet} boundary condition
+  (section~\ref{sec:dirichlet}) is defined.
+\end{itemize}
+Using this potential in equation~\eqref{eq:3} yields
+\begin{gather}
+  \label{eq:5}
+  \nabla\vectimes\left(\nu\nabla\vectimes\vect{A}\right)=\vect{J}\text{~.}
+\end{gather}
+\par Eddy currents are not regarded in the following in order to keep
+things simple.  For many devices this is a valid procedure:
+\begin{itemize}
+\item Iron cores of transformers (and generally of electrical
+  machines) are subdevided into single sheets to suppress eddy currents.
+\item Windings are made of thin wire in order to suppress eddy currents.
+\end{itemize}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "manual"
+%%% ispell-local-dictionary: "en"
+%%% End: 

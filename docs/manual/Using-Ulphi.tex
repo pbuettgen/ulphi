@@ -1,0 +1,391 @@
+% -*- coding: utf-8 -*-
+%
+% Copyright © 2012-2016 Philipp Büttgenbach
+%
+% This file is part of ulphi, a CAE tool and
+% library for computing electromagnetic fields.
+%
+% Permission is granted to copy, distribute and/or modify this
+% document under the terms of the \gls{gnu} Free Documentation
+% License, Version 1.3 or any later version published by the Free
+% Software Foundation; with no Invariant Sections, no Front-Cover
+% Texts, and no Back-Cover Texts.  A copy of the license is included
+% in the section entitled GNU Free Documentation License.
+%
+% This manual is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+
+\chapter{Using Ulphi}
+\label{cha:practical-aspects}
+
+\section{Preprocessing}
+\label{sec:preprocessing}
+
+\subsection{Grids}
+\label{sec:grids}
+
+\begin{figure}
+  \centering
+    \hfil
+    \subcaptionbox{cartesian}{
+      \includeinkscape{Cart-Grid-Init}}
+    \hfil
+    \subcaptionbox{polar}{
+      \includeinkscape{Polar-Grid-Init}}
+    \hfil
+  \caption{Supported grid types}
+  \label{fig:sup-grid-types}
+\end{figure}
+Currently, two types of grids are supported (figure~\ref{fig:sup-grid-types}):
+\begin{itemize}
+\item Cartesian grids
+\item Polar grids
+\end{itemize}
+Some notes about grids:
+\begin{itemize}
+\item Grids are defined by their \gls{llc} and their \gls{urc}.
+\item At creation time the global coordinate system becomes the grids
+  local coordinate system.
+\item Only rotating and shifting the grid make that global and local
+  coordinate system differ.
+\item Grids are default initialized by a material of no conductivity and the
+  free space permeability.
+\item Material definitions inside a grid may overlap. Valid is the
+  last definition.
+\end{itemize}
+
+\subsection{Grid Boundaries}
+\label{sec:grid-boundaries}
+
+A grid's boundaries are named as shown in figure~\ref{fig:boundary-names}.
+\begin{figure}
+  \begin{minipage}{.485\linewidth}
+    \centering
+    \includeinkscape{boundary-names}
+    \caption{A grid's boundary names}
+    \label{fig:boundary-names}
+  \end{minipage}
+  \hfil
+  \begin{minipage}{.485\linewidth}
+    \centering
+    \includeinkscape{edge-orientation}
+    \caption{Vertice numbering onto boundaries}
+    \label{fig:Vertice-numbering-onto-boundaries}
+  \end{minipage}
+\end{figure}
+Vertices onto the boundary have their own numbering as shown in
+figure~\ref{fig:Vertice-numbering-onto-boundaries}.
+
+
+\subsection{Grid Coupling}
+\label{sec:grid-coupling}
+
+When coupling boundaries some care must be taken by the user that it
+is done correctly because the software can not detect all possible
+error conditions:
+\begin{itemize}
+\item For a grid region at maximum two edges may be used as source
+  edges in couplings.
+\item These links must be defined on parallel edges.
+\end{itemize}
+After linking two edges the source edge will be hidden by the target
+edge.  Figure~\ref{fig:GridCouplings} shows some examples.
+\begin{figure}
+  \centering
+  \subcaptionbox{Correct forwarding for the corner vertex}{
+    \includeinkscape{edge-linking-1}} \hfil
+  \subcaptionbox{Correct forwarding for the corner vertex}{
+    \includeinkscape{edge-linking-2}} \\[1.4\bigskipamount]
+  \subcaptionbox{Wrong! The corner vertex exists twice}{
+    \includeinkscape{edge-linking-3}}
+  \caption{Examples for grid couplings}
+  \label{fig:GridCouplings}
+\end{figure}
+Cyclic coupling of four grids is currently supported and correctly
+handled when it is detected.  This support may be removed in the
+future because it is a huge complication. So, avoid cyclic coupling of
+four grids!
+
+
+\subsection{Vertex Distributions}
+
+The distribution of vertices inside a grid is defined by vertex
+distributions.  Two types are currently implemented:
+\begin{itemize}
+\item A linear vertex distribution and
+\item an exponential vertex distribution.
+\end{itemize}
+If you have special demands you can implement your own vertex
+distribution type by deriving from the \texttt{VertexDistribution}
+base class.
+
+
+\subsection{Shapes}
+
+Shapes are used to define materials and current carrying regions
+inside a grid.  The following shapes are implemented:
+\begin{description}
+\item[Rectangle] A rectangle is a shape with four edges parallel to
+  the coordinate system's axes.  This implies that in a polar system a
+  rectangle has two rounded edges.
+\item[Circle] is defined by its center point and its radius.
+\end{description}
+If you have special demands you can implement your own shape types by
+deriving from the \texttt{Shape} base class.
+
+
+\subsection{Reluctivity Models}
+\label{sec:material-models}
+
+Several reluctivity models are supported which are described in the
+following.
+\begin{description}
+\item[Constant reluctivity] The constant reluctivity model is simply a
+  constant value. An example for an material with a constant
+  reluctivity is air.
+\item[Arctan model] This model has its origin in the FLUX® \gls{cad}
+  package \parencite{Cedrat:2006}. It uses an arctan function to model the
+  nonlinear behaviour of materials like iron.
+  \begin{gather}
+    \label{eq:39}
+    B(H)=\mu_0H+\frac{2B_{\mathrm{i,s}}}{{\pi}}\arctan\left(
+    \frac{{\pi}(\mu_{\mathrm{r}}-1)\mu_0H}{2B_{\mathrm{i,s}}}\right)
+  \end{gather}
+  with
+  \begin{align*}
+    \mu_{\mathrm{r}}&\quad\text{rel. permeability at the origin} \\
+    B_{\mathrm{i,s}}&\quad\text{saturation polarization}
+  \end{align*}
+  This model may be initialized from these two parameters or from
+  measured data.  In the last case the
+  \personname{Levenberg}-\personname{Marquardt} procedure is used to
+  find a set of good parameters.  \par Although using such a model
+  might look like a good idea on a first glance because a strictly
+  monotone curve helps the \personname{Newton} process to converge, this model
+  has some drawbacks:
+  \begin{itemize}
+  \item The $B$-$H$-characteristic is modeled but for solving equation
+    \eqref{eq:41} the $\nu$-$B$-characteristic is required.  Because
+    there is no analytical expression for the
+    $\nu$-$B$-char\-ac\-ter\-is\-tic resulting from this model,
+    \personname{Newton}'s procedure must be used.
+  \item The calculation of the derivative $\partial\nu/\partial B$
+    yields a lengthy expression which is hard to check for
+    correctness.
+  \item Most of the time real world magnetization curves are not
+    fitted that well by this model.
+  \end{itemize}
+\item[Square root model] This model uses a square root function to
+  approximate the $B$-$H$-curve:
+  \begin{align}
+    \label{eq:42}
+    B(H) &=
+    \mu_0H+B_{\mathrm{i,s}}\frac{H_a+1-\sqrt{(H_a+1)^2-4H_a(1-a)}}{2(1-a)}
+    \intertext{with}
+    H_a&=\mu_0H\frac{\mu_r-1}{B_{\mathrm{i,s}}}
+  \end{align}
+  In all other aspects this model is similar to the previous model.
+\item[Spline model] This model uses a spline to interpolate measured
+  values.  If extrapolation is required, a tangent line through the
+  first or last data point is used.  This model is recommended for
+  everyday use.
+\end{description}
+Figure~\ref{fig:reluct-model-perf} shows how these models perform with
+real world data.
+\begin{figure}
+  \centering
+  \sisetup{per-mode=fraction}
+  \subcaptionbox{Arctan model}{
+    \begin{tikzpicture}
+      \begin{semilogyaxis}[
+        height=.275\textheight,
+        width=.44495934690622113\textheight,
+        xlabel=$B/\unit{\tesla}\quad\longrightarrow$,
+        ylabel=$\nu\cdot\unit{\henry\per\metre}\quad\longrightarrow$,
+        grid=major,
+        grid style={line width=.18mm},
+        tick style={line width=.35mm},
+        legend style={at={(0.04,0.96)},anchor=north west},
+        line width=.35mm]
+        \addplot[mark=diamond,only marks]
+          table[x=B, y=NuOrig] {M400_50A-arctan.csv};
+        \addplot[smooth,mark=none,line width=.7mm,style=dotted]
+          table[x=B, y=NuModel] {M400_50A-arctan.csv};
+        \legend{orig. data, arctan model}
+      \end{semilogyaxis}
+    \end{tikzpicture}
+  }\\ \bigskip
+  \subcaptionbox{Square root model}{
+    \begin{tikzpicture}
+      \begin{semilogyaxis}[
+        height=.275\textheight,
+        width=.44495934690622113\textheight,
+        xlabel=$B/\unit{\tesla}\quad\longrightarrow$,
+        ylabel=$\nu\cdot\unit{\henry\per\metre}\quad\longrightarrow$,
+        grid=major,
+        grid style={line width=.18mm},
+        tick style={line width=.35mm},
+        legend style={at={(0.04,0.96)},anchor=north west},
+        line width=.35mm]
+        \addplot[mark=diamond,only marks]
+          table[x=B, y=NuOrig] {M400_50A-sqrt.csv};
+        \addplot[smooth,mark=none,line width=.7mm,style=dotted]
+          table[x=B, y=NuModel] {M400_50A-sqrt.csv};
+        \legend{orig. data, sqrt model}
+      \end{semilogyaxis}
+    \end{tikzpicture}
+  }\\ \bigskip
+  \subcaptionbox{Spline model}{
+    \begin{tikzpicture}
+      \begin{semilogyaxis}[
+        height=.275\textheight,
+        width=.44495934690622113\textheight,
+        xlabel=$B/\unit{\tesla}\quad\longrightarrow$,
+        ylabel=$\nu\cdot\unit{\henry\per\metre}\quad\longrightarrow$,
+        grid=major,
+        grid style={line width=.18mm},
+        tick style={line width=.35mm},
+        legend style={at={(0.04,0.96)},anchor=north west},
+        line width=.35mm]
+        \addplot[mark=diamond,only marks]
+          table[x=B, y=NuOrig] {M400_50A-spline.csv};
+        \addplot[smooth,mark=none,line width=.7mm,style=dotted]
+          table[x=B, y=NuModel] {M400_50A-spline.csv};
+        \legend{orig. data, spline model}
+      \end{semilogyaxis}
+    \end{tikzpicture}
+  }
+  \caption[Reluctivity models and how they perform with real world
+  data]{
+    Reluctivity models and how they perform with real world
+    data. The material is M400-50A.}
+  \label{fig:reluct-model-perf}
+\end{figure}
+
+
+\subsection{Material and Load Region Boundaries Inside a Grid}
+
+Inside a grid the boundaries of material and load regions are
+approximated in order to match the grid
+(figure~\ref{fig:ApproxShapes}).
+\begin{figure}
+  \centering
+  \includeinkscape{Approx-Shapes}
+  \caption{Geometry approximation inside grids}
+  \label{fig:ApproxShapes}
+\end{figure}
+Errors due to this approximation can be kept small by using a
+reasonable fine grid.  If you want to suppress this approximation, you
+should carefully line up your geometry with the secondary grid.
+
+
+\section{Solving}
+\label{sec:solving}
+
+There are three different solving procedures implemented:
+\begin{description}
+\item[Linear solver] This solver is used if all material properties
+  are field independent.
+\item[Iterative solver] This is a simple iterative solver.  Good luck!
+\item[\personname{Newton} iteration] This solver uses the
+  sophisticated \personname{Newton} procedure and is the best choice
+  for nonlinear tasks (field dependent relucitivty).
+\end{description}
+
+
+\section{Post processing}
+\label{sec:postprocessing}
+
+From the grid graph the vertice's positions and potentials can be
+extracted.
+In the python interface this is done by:
+\\
+\begin{tabular}{lp{.82\textwidth}}
+\pythonlogo & \begin{lstlisting}[language=python]
+# ... initialize grid ...
+grid_compiler = GridCompiler(grid)
+grid_graph = grid_compiler()
+grid_graph.Newton(1e-5, 24)
+
+# Access results
+grid_graph.positions
+grid_graph.potentials
+\end{lstlisting}
+\end{tabular}
+
+
+\subsection{Using a Path}
+\label{sec:using-path}
+
+\begin{figure}
+  \centering
+  \hfil
+  \subcaptionbox{evaluate flux}{
+    \includeinkscape{calc-flux-with-path}}
+  \hfil
+  \subcaptionbox{evaluate magnetic voltage}{
+    \includeinkscape{calc-magnetic-voltage-with-path}}
+  \hfil
+  \caption{Using a path for postprocessing}
+  \label{fig:UsePath}
+\end{figure}
+To evaluate the total flux\footnote{The total flux can be computed
+from the average flux density.} and the magnetic voltage, a path is
+used.
+\\
+\begin{tabular}{lp{.82\textwidth}}
+\pythonlogo & \begin{lstlisting}[language=python]
+# Initialize a path
+path = PathInGridGraph(grid_graph, pointlist)
+
+# Access average flux density
+path.average_flux_density
+
+# Access the magnetic voltage
+path.magnetic_voltage
+\end{lstlisting}
+\end{tabular}
+
+
+\subsection{Check Your Results}
+
+It is always important to check the results:
+\begin{itemize}
+\item Does the field line plot look reasonable?
+\item Often another method like the ``Average-Iron-Path''-method can
+  be used to check results:  Is the derivation within an expected range?
+\item Repeat your computation with a finer grid.  How does this
+  influence your results?
+\end{itemize}
+
+
+\section{Parallelization}
+\label{sec:parallelization}
+
+This library targets at small to medium sized problems.\footnote{That
+  means grids with up to about half a millon of nodes.} In this sphere
+there is no great gain from parallelization.  Nevertheless it is
+possible to exploit the power of multiple processors:
+\begin{itemize}
+\item Most of the time you won't analyse just a single design. What
+  you want is to optimize your design.  So, use a parallel ant colony
+  optimizer!
+\item Although the library is limited to calculations in two
+  dimensions it can be used for calculations in three dimension in
+  some special cases.  This is done by cutting the device into slices
+  and doing for every slice a two dimensional calculation.  These
+  calculations can run in parallel.
+\end{itemize}
+Doing parallization on such a high level has a great advantage over a
+parallized solver:  As there is only a very loose coupling at that
+level it scales very well.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "manual"
+%%% ispell-local-dictionary: "en_US"
+%%% End: 
+
+%  LocalWords:  vertices

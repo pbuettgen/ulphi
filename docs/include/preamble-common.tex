@@ -1,0 +1,67 @@
+% -*- coding: utf-8 -*-
+%
+% Copyright © 2012-2015 Philipp Büttgenbach
+%
+% This file is part of ulphi, a CAE tool and library for computing
+% electromagnetic fields.
+%
+% Permission is granted to copy, distribute and/or modify this
+% document under the terms of the \gls{gnu} Free Documentation
+% License, Version 1.3 or any later version published by the Free
+% Software Foundation; with no Invariant Sections, no Front-Cover
+% Texts, and no Back-Cover Texts.  A copy of the license is included
+% in the section entitled GNU Free Documentation License.
+%
+
+\PassOptionsToPackage{math-style=ISO,partial=upright}{unicode-math}
+
+\usepackage[ngerman,main=english]{babel}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{siunitx}
+\usepackage{graphicx,svg}
+\usepackage{pgfplots}
+\usepackage{csquotes}
+\usepackage[style=authoryear]{biblatex}
+\usepackage{sourcesanspro}
+\usepackage[stixtwo]{fontsetup}
+
+\newcommand*{\personname}[1]{\textsc{#1}}
+\newcommand*{\partdiff}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand*{\aninteg}[4]{\ensuremath{#1_{#2}#3\;\symrm{d}#4}}
+\newcommand*{\integ}[3]{\aninteg{\int}{#1}{#2}{#3}}
+\newcommand*{\integg}[4]{\ensuremath{\int_{#1}^{#2}#3\;\symrm{d}#4}}
+\newcommand*{\iinteg}[3]{\aninteg{\iint}{#1}{#2}{#3}}
+\newcommand*{\iiinteg}[3]{\aninteg{\iiint}{#1}{#2}{#3}}
+\newcommand*{\ointeg}[3]{\ensuremath{\oint_{#1}\,#2\;\symrm{d}#3}}
+\newcommand*{\oiinteg}[3]{\aninteg{\oiint}{#1}{#2}{#3}}
+\newcommand*{\vect}[1]{\ensuremath{\symbf{#1}}}
+\newcommand*{\matr}[1]{\vect{#1}}
+\newcommand*{\jacmatr}{\ensuremath{\matr{G}_{\symrm{J}}}}
+\newcommand*{\xmax}[1]{\ensuremath{#1_{\text{max}}}}
+\newcommand*{\diag}{\ensuremath{\operatorname{diag}}}
+\newcommand*{\vectnorm}[1]{\ensuremath{\lvert#1\rvert}}
+\newcommand*{\laplaceop}{\ensuremath{\operatorname{\increment}}}
+\newcommand*{\grad}{\ensuremath{\operatorname{grad}}}
+\newcommand*{\divop}{\ensuremath{\operatorname{div}}}
+
+\addbibresource{../include/literature.bib}
+
+\graphicspath{{../images}}
+\svgpath{{../images/}}
+
+\pgfplotsset{
+  compat=1.8,
+  grid=major,
+  grid style={line width=.18mm},
+  tick style={line width=.35mm},
+  table/search path={../datasets},
+}
+
+\definecolor{copper}{cmyk}{0,.32,.72,.28}
+
+\input{../include/config.tex}
+
+%%% Local Variables: 
+%%% mode: LaTeX
+%%% ispell-local-dictionary: "en_US"
+%%% End:

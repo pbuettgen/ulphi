@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="595.27563pt"
+   height="419.52756pt"
+   id="svg3049"
+   version="1.1"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="wound-iron-core-model-Large.svg"
+   viewBox="0 0 744.09452 524.40944"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">Wound iron core model (Large)</title>
+  <defs
+     id="defs3051">
+    <filter
+       id="filter3816"
+       inkscape:collect="always"
+       x="-0.0085714304"
+       y="-0.0074273991"
+       width="1.0202431"
+       height="1.0128819">
+      <feGaussianBlur
+         id="feGaussianBlur3818"
+         stdDeviation="0.35433078"
+         inkscape:collect="always" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5297"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5299"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-9"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5108-3"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.68457961"
+     inkscape:cx="270.23884"
+     inkscape:cy="311.13985"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     units="mm"
+     inkscape:window-width="1276"
+     inkscape:window-height="968"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       id="grid1"
+       units="mm"
+       originx="0"
+       originy="0"
+       spacingx="0.88582674"
+       spacingy="0.88582676"
+       empcolor="#839496"
+       empopacity="0.30196078"
+       color="#93a1a1"
+       opacity="0.14901961"
+       empspacing="4"
+       dotted="false"
+       gridanglex="30"
+       gridanglez="30"
+       visible="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3054">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Philipp Büttgenbach</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:relation>Ulphi poster</dc:relation>
+        <dc:language>en</dc:language>
+        <dc:title>Wound iron core model (Large)</dc:title>
+        <cc:license
+           rdf:resource="http://artlibre.org/licence/lal" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://artlibre.org/licence/lal">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-527.95272)">
+    <g
+       id="g3377"
+       transform="matrix(2.88,0,0,2.88,-42.622763,388.03902)">
+      <g
+         style="display:inline"
+         transform="translate(0,-1849.6063)"
+         id="layer1-4"
+         inkscape:label="Geometrie">
+        <path
+           sodipodi:nodetypes="ccccccccc"
+           inkscape:connector-curvature="0"
+           d="M 141.73228,2090.5512 H 99.212593 l -3e-6,-99.2126 c 0,-7.9724 -6.200787,-14.1732 -14.173228,-14.1732 H 42.51968 l 5e-6,-42.5197 H 85.03937 c 31.00394,0 56.69291,25.6889 56.69291,56.6929 z"
+           style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#a0a0a0;fill-opacity:1;stroke:none;stroke-width:1.24016;marker:none;enable-background:accumulate"
+           id="path4754" />
+        <path
+           sodipodi:nodetypes="ccccccsc"
+           inkscape:connector-curvature="0"
+           d="m 99.212596,2090.5512 -3e-6,-99.2126 c 0,-7.9724 -6.200787,-14.1732 -14.173228,-14.1732 H 42.519683 m 2e-6,-42.5197 h 42.519682 c 31.003943,0 56.692913,25.6889 56.692913,56.6929 v 99.2126"
+           style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;stroke:#484848;stroke-width:0.615157;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker:none;filter:url(#filter3816);enable-background:accumulate"
+           id="path4754-2" />
+      </g>
+      <g
+         transform="translate(0,-302.63184)"
+         style="display:inline"
+         inkscape:label="Boundary Condition"
+         id="layer5">
+        <path
+           sodipodi:nodetypes="cssc"
+           inkscape:connector-curvature="0"
+           d="M 42.519685,348.69482 H 85.03937 c 52.26378,0 95.66929,43.40552 95.66929,95.66929 v 99.2126"
+           style="display:inline;fill:none;stroke:#3c3c3c;stroke-width:0.86122;stroke-miterlimit:4;stroke-dasharray:0.43061, 0.43061;stroke-dashoffset:0;stroke-opacity:1"
+           id="path7488" />
+        <path
+           sodipodi:nodetypes="cssc"
+           inkscape:connector-curvature="0"
+           d="M 42.519685,433.73419 H 85.03937 c 6.200787,0 10.629921,4.42914 10.629921,10.62993 v 99.21259"
+           style="display:inline;fill:none;stroke:#3c3c3c;stroke-width:0.86122;stroke-miterlimit:4;stroke-dasharray:0.43061, 0.43061;stroke-dashoffset:0;stroke-opacity:1"
+           id="path7488-9" />
+        <text
+           transform="rotate(-90)"
+           id="text4873"
+           y="198.4252"
+           x="-540.03339"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+           xml:space="preserve"><tspan
+             y="198.4252"
+             x="-540.03339"
+             id="tspan4875"
+             sodipodi:role="line"
+             style="font-size:8.68056px;line-height:1.25;font-family:sans-serif">$A_z=\qty{0}{\weber\per\metre}$</tspan></text>
+        <text
+           transform="rotate(-90)"
+           id="text4877"
+           y="85.039368"
+           x="-541.80505"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+           xml:space="preserve"><tspan
+             y="85.039368"
+             x="-541.80505"
+             id="tspan4879"
+             sodipodi:role="line"
+             style="font-size:8.68056px;line-height:1.25;font-family:sans-serif">$A_z=\hat{A}\cos(\omega t)$</tspan></text>
+      </g>
+      <g
+         transform="translate(0,-302.63184)"
+         style="display:inline"
+         inkscape:label="Gitter"
+         id="layer3">
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path6052"
+           d="M 42.519685,345.15152 H 85.03937 l -8e-6,92.12598 H 42.519677 Z"
+           style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:0.0470588;stroke:#000000;stroke-width:0.43061;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path6050-2"
+           d="m 92.125976,543.57671 h 92.125994 v -99.21259 l -92.125994,-1e-5 z"
+           style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:0.0470588;stroke:#000000;stroke-width:0.43061;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path6050-2-9"
+           d="m 92.125976,444.36411 92.125994,1e-5 c 0,-55.80709 -43.40551,-99.21261 -99.2126,-99.2126 l -8e-6,92.12598 c 4.429134,0 7.086614,2.65748 7.086614,7.08661 z"
+           style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:0.0470588;stroke:#000000;stroke-width:0.43061;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+      </g>
+    </g>
+  </g>
+</svg>
